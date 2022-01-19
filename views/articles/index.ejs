@@ -11,7 +11,7 @@
            <%= article.title %>
            <%= article.createdAt.toLocaleDateString() %>
            <%= article.content %>
-           <a href="articles/<%= article.id%>">Read more</a>
+           <a href="/articles/<%= article.id%>">Read more</a>
            <form action="/articles/like/<%= article.id%>" method="POST">
             <button type="submit">LIKE</button>
         </form>

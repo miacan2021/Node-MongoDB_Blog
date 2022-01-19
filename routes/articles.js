@@ -1,102 +1,27 @@
 const express = require('express')
-const Article = require('../models/articles')
-const Comment = require('../models/comment')
 const router = express.Router()
+const commentController = require('../controllers/comment.controller')
+const likeController = require('../controllers/like.controller')
+const crudController = require('../controllers/crud.controller')
 
-router.get('/new', (req, res)=>{
-    res.render('articles/new',{article: new Article()})
-})
+router.get('/new', crudController.getNew)
 
-router.get('/edit/:id', async(req, res) => {
-    const article = await Article.findById(req.params.id)
-    res.render('articles/edit', {article})
-})
+router.get('/edit/:id', crudController.getEdit)
 
-router.get('/:id', async(req, res) => {
-    const article = await Article.findById(req.params.id)
-    if(article === null) res.redirect('/')
-    res.render('articles/show', {article})
-})
+router.get('/:id', crudController.getMorePage)
 
-router.post('/', async (req, res) => {
-   let article = new Article({
-       title: req.body.title,
-       content: req.body.content
-   })
-   try{
-       article = await article.save()
-       res.redirect(`/articles/${article.id}`)
-   }catch(e){
-        console.log(e)
-        res.render('articles/new', {article})
-   }
-})
+router.post('/', crudController.postArticle)
 
+router.post('/edit/:id', crudController.postEditArticle)
 
-router.post('/edit/:id', async(req, res) => {
-    const {title, content} = req.body
-    const article = await Article.findById(req.params.id)
-    article.title = title,
-    article.content = content
-    try{
-        article = await article.save()
-        res.render(`articles/show`, {article})
-    }catch(e){
-         console.log(e)
-         res.render(`articles/show`, {article})
-    }
-})
+router.post('/delete/:id', crudController.postDeleteArticle)
 
-router.post('/delete/:id', async(req, res) => {
-    await Article.findByIdAndDelete(req.params.id)
-   await Comment.deleteMany({articleId: req.params.id})
+router.post('/like/:id', likeController.addLike)
 
-    res.redirect('/')
-})
+router.post('/dislike/:id', likeController.addDislike)
 
-router.post('/like/:id', async(req, res) => {
-    const article = await Article.findById(req.params.id)
-    article.like += 1
-    try{
-        article = await article.save()
-        res.render(`articles/index`, {article})
-    }catch(e){
-         console.log(e)
-         res.redirect('/')
-    }
-})
-
-router.post('/dislike/:id', async(req, res) => {
-    const article = await Article.findById(req.params.id)
-    article.dislike += 1
-    try{
-        article = await article.save()
-        res.render(`articles/index`, {article})
-    }catch(e){
-         console.log(e)
-         res.redirect('/')
-    }
-})
-
-router.post('/comment/:id', async (req, res) => {
-    let article = await Article.findById(req.params.id)
-    let comment = new Comment({
-        name: req.body.name,
-        comment: req.body.comment,
-        articleId: article.id
-     })
-    try{
-        comment = await comment.save()
-        article.comments = [...article.comments, {name:comment.name, comment:comment.comment, createdAt:comment.createdAt }]
-        article = await article.save()
-        res.render(`articles/show`, {article})
-    }catch(e){
-         console.log(e)
-         res.redirect('/')
-    }
- })
+router.post('/comment/:id', commentController.postComment)
  
-
 
 
 module.exports = router

@@ -6,7 +6,6 @@ router.get('/new', (req, res)=>{
     res.render('articles/new',{article: new Article()})
 })
 
-
 router.get('/edit/:id', async(req, res) => {
     const article = await Article.findById(req.params.id)
     res.render('articles/edit', {article})
@@ -51,5 +50,34 @@ router.post('/delete/:id', async(req, res) => {
     await Article.findByIdAndDelete(req.params.id)
     res.redirect('/')
 })
+
+
+
+router.post('/like/:id', async(req, res) => {
+    const article = await Article.findById(req.params.id)
+    article.like += 1
+    try{
+        article = await article.save()
+        res.render(`articles/index`, {article})
+    }catch(e){
+         console.log(e)
+         res.redirect('/')
+    }
+})
+
+
+router.post('/dislike/:id', async(req, res) => {
+    const article = await Article.findById(req.params.id)
+    article.dislike += 1
+    try{
+        article = await article.save()
+        res.render(`articles/index`, {article})
+    }catch(e){
+         console.log(e)
+         res.redirect('/')
+    }
+})
+
+
 
 module.exports = router

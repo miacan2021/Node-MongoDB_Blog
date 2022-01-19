@@ -1,0 +1,19 @@
+<%- include('../includes/head.ejs') %>
+
+
+<body>
+
+    <main class="container is-text-center">
+        <h1 class="title has-text-warning mb-4"><%= article.title%></h1>
+        <p><%= article.createdAt.toLocaleString() %></p>
+        <a href="/">All articles</a>
+        <a href="/articles/edit/<%= article.id %>">Edit</a>
+        <p><%= article.content %></p>
+        <form action="/articles/delete/<%= article.id %>" method="post">
+            <button type="submit">Delete</button>
+        </form>
+
+    </main>
+
+
+<%- include('../includes/end.ejs') %>

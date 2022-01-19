@@ -21,6 +21,9 @@ const articleSchema = new Schema({
     dislike:{
         type: Number,
         default: 0
+    },
+    comments:{
+        type: Array
     }
 })
 

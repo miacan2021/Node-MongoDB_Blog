@@ -12,8 +12,19 @@
         <form action="/articles/delete/<%= article.id %>" method="post">
             <button type="submit">Delete</button>
         </form>
-
     </main>
+    <section>
+        <% article.comments.forEach(comment => { %>
+               <%= comment.name %> 
+               <%= comment.createdAt.toLocaleDateString() %>
+               <%= comment.comment %>
+        <% }) %>
+    </section>
+    <section>
+        <form action="/articles/comment/<%= article.id%>" method="POST">
+            <%- include('../includes/comment.form.ejs') %>
+        </form>
+    </section>
 
 
 <%- include('../includes/end.ejs') %>

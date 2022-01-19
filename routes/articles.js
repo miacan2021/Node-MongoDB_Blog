@@ -1,5 +1,6 @@
 const express = require('express')
 const Article = require('../models/articles')
+const Comment = require('../models/comment')
 const router = express.Router()
 
 router.get('/new', (req, res)=>{
@@ -48,10 +49,10 @@ router.post('/edit/:id', async(req, res) => {
 
 router.post('/delete/:id', async(req, res) => {
     await Article.findByIdAndDelete(req.params.id)
+   await Comment.deleteMany({articleId: req.params.id})
+
     res.redirect('/')
 })
-
-
 
 router.post('/like/:id', async(req, res) => {
     const article = await Article.findById(req.params.id)
@@ -65,7 +66,6 @@ router.post('/like/:id', async(req, res) => {
     }
 })
 
-
 router.post('/dislike/:id', async(req, res) => {
     const article = await Article.findById(req.params.id)
     article.dislike += 1
@@ -77,6 +77,25 @@ router.post('/dislike/:id', async(req, res) => {
          res.redirect('/')
     }
 })
+
+router.post('/comment/:id', async (req, res) => {
+    let article = await Article.findById(req.params.id)
+    let comment = new Comment({
+        name: req.body.name,
+        comment: req.body.comment,
+        articleId: article.id
+     })
+    try{
+        comment = await comment.save()
+        article.comments = [...article.comments, {name:comment.name, comment:comment.comment, createdAt:comment.createdAt }]
+        article = await article.save()
+        res.render(`articles/show`, {article})
+    }catch(e){
+         console.log(e)
+         res.redirect('/')
+    }
+ })
+ 
 
 
 

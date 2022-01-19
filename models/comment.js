@@ -13,7 +13,10 @@ const commentSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    articleId: {
+        type: String,
+    },
 })
 
 module.exports = mongoose.model('Comment', commentSchema)

@@ -2,29 +2,42 @@
 
 
 <body>
-
-    <main class="container is-text-center">
-        <h1 class="title has-text-warning mb-4"><%= article.title%></h1>
-        <p><%= article.createdAt.toLocaleString() %></p>
-        <a href="/">All articles</a>
-        <a href="/articles/edit/<%= article.id %>">Edit</a>
-        <p><%= article.content %></p>
+    <div class="conteiner m-5">
+        <section class="section box has-text-centered">
+        <h1 class="title has-text-info mb-4 is-family-monospace"><%= article.title%></h1>
+        <p class="is-size-6 has-text-weight-light is-family-secondary has-text-grey-dark"><%= article.createdAt.toLocaleString() %></p>
+        <p class="mt-5"><%= article.content %></p>
+        <div class="is-flex is-justify-content-center is-align-content-center mt-6">
+        <a class="button is-info is-light px-6 mr-1" href="/articles/edit/<%= article.id %>">Edit</a>
         <form action="/articles/delete/<%= article.id %>" method="post">
-            <button type="submit">Delete</button>
+            <button type="submit" class="button is-danger is-light px-6">Delete</button>
         </form>
-    </main>
-    <section>
+        </div>
+        </section>
+    <section class="section box has-text-centered">
+        <h1 class="title has-text-info mb-4 is-family-monospace	">Comments</h1>
         <% article.comments.forEach(comment => { %>
-               <%= comment.name %> 
-               <%= comment.createdAt.toLocaleDateString() %>
-               <%= comment.comment %>
+        <div class="card">
+            <div class="card-content">
+                <p class="has-text-info is-size-4 is-family-monospace">Name: <%= comment.name %></p>
+                <p class="is-size-7 has-text-weight-light is-family-secondary has-text-grey-dark"><%= comment.createdAt.toLocaleDateString() %></p>
+              <div class="content mt-3">
+                <%= comment.comment %>
+              </div>
+            </div>
+          </div>
         <% }) %>
     </section>
-    <section>
+    <section class="section box has-text-centered">
+        <h1 class="title has-text-info mb-4 is-family-monospace	">Send a comment</h1>
+        <div class="px-5">
         <form action="/articles/comment/<%= article.id%>" method="POST">
             <%- include('../includes/comment.form.ejs') %>
         </form>
+        </div>
+        <a href="/" class="button is-primary is-light px-6 mt-6">Back to home</a>
     </section>
+    </div>
 
 
 <%- include('../includes/end.ejs') %>

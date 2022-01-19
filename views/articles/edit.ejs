@@ -1,0 +1,12 @@
+<%- include('../includes/head.ejs') %>
+
+
+<body>
+    <h1>Edit article</h1>
+    <div class="container">
+        <form action="/articles/edit/<%= article.id%>" method="POST">
+        <%- include('../includes/form.ejs') %>
+        </form>
+    </div>
+
+    <%- include('../includes/end.ejs') %>

@@ -1,13 +1,13 @@
 {
   "name": "node-mid",
   "version": "1.0.0",
-  "description": "",
+  "description": "mongodb-blog",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "shiho",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.1",
